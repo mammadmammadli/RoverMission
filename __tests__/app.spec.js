@@ -1,11 +1,13 @@
 const request = require("supertest");
 const app = require("../app.js");
 
+jest.setTimeout(10000);
+
 describe("Application", () => {
-    test.todo("Health check", done => {
-        request(app).get('/').then(response => {
-            expect(response.body === "ok");
-            expect(response.statusCode === 200 || 201);
+    test("Health check", done => {
+        request(app).get('/health-check').then(response => {
+            expect(response.text).toBe("ok");
+            expect(response.statusCode).toBe(200);
             done();
         })
     });

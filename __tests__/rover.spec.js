@@ -37,17 +37,20 @@ describe("Rover", () => {
             expect(res.body).toEqual("(-1, 4) SOUTH");
             done();
         });
-        
+
         request(app).post('/move').send({ command: "RFFLB" }).expect(200).end((err, res) => {
             expect(res.body).toEqual("(0, 1) SOUTH");
             done();
         });
-        
+
         request(app).post('/move').send({ command: "BLFFFRL" }).expect(200).end((err, res) => {
             expect(res.body).toEqual("(-1, 2) WEST");
             done();
         });
     });
 
-    it.todo("Reports position after collision");
+    it.todo("Reports position after collision", () => {
+        const { collapseReport } = rover.move("FFFFRSE");
+        expect(collapseReport).toEqual("(2, 4) EAST STOPPED");
+    });
 });

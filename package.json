@@ -1,0 +1,26 @@
+{
+  "name": "rovermission",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watchAll"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mammadmammadli/RoverMission.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mammadmammadli/RoverMission/issues"
+  },
+  "homepage": "https://github.com/mammadmammadli/RoverMission#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^27.0.4",
+    "superagent": "^6.1.0",
+    "supertest": "^6.1.3"
+  }
+}

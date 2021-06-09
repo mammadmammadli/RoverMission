@@ -49,7 +49,7 @@ describe("Rover", () => {
         });
     });
 
-    it.todo("Reports position after collision", () => {
+    it("Reports position after collision", () => {
         const { collapseReport } = rover.move("FFFFRSE");
         expect(collapseReport).toEqual("(2, 4) EAST STOPPED");
     });

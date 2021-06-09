@@ -6,8 +6,10 @@ class Rover {
     direction = null;
 
     move(directions) {
-        directions.split('').forEach(direction => {
-            switch (direction) {
+        let hasCollapsed = false;
+
+        for (let i = 0; i < directions.split('').length; i++) {
+            switch (directions[i]) {
                 case "F":
                     this.coordinate.y += 1;
                     this.direction = "North";
@@ -26,7 +28,35 @@ class Rover {
                     break;
                 default:
             }
-        });
+
+            hasCollapsed = this.checkIfThereIsAnCollision();
+            if (hasCollapsed) {
+                const crashCoordinate = this.coordinate;
+
+                switch (this.direction) {
+                    case "East":
+                        crashCoordinate.x++;
+                        break;
+                    case "West":
+                        crashCoordinate.x--;
+                        break;
+                    case "South":
+                        crashCoordinate.y--;
+                        break;
+                    case "North":
+                        crashCoordinate.y++;
+                        break;
+                }
+                return { collapseReport: `(${crashCoordinate.x}, ${crashCoordinate.y}) ${this.direction.toUpperCase()} STOPPED` };
+            }
+        }
+
+    }
+
+    checkIfThereIsAnCollision() {
+        const obstacles = [[1, 4], [3, 5], [7, 4]];
+
+        return obstacles.some(([x, y]) => x === this.coordinate.x && y === this.coordinate.y);
     }
 
     getCoordinates() {

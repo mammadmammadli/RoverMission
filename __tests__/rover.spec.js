@@ -48,4 +48,6 @@ describe("Rover", () => {
             done();
         });
     });
+
+    it.todo("Reports position after collision");
 });

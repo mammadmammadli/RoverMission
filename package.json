@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "coverage": "jest --coverage",
-    "test": "jest --watchAll"
+    "test": "jest --coverage",
+    "test:watch": "jest --watchAll"
   },
   "repository": {
     "type": "git",

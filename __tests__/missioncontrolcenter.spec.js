@@ -7,6 +7,6 @@ describe("Missiom Control Center", () => {
         const MCC = new MissionControlCenter();
         const safestRoute = MCC.calculatesSafestRoute(startCoordinate, endCoordinate);
 
-        expect(safestRoute).toBe("NWWNWNNN");
+        expect(safestRoute).toBe("FLLFLFFF");
     });
 });

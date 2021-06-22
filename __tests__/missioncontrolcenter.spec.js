@@ -2,11 +2,11 @@ const MissionControlCenter = require("../MissionControlCenter");
 
 describe("Missiom Control Center", () => {
     it("Calculates safest route for Rover", () => {
-        const startCoordinate = [4, 5];
-        const endCoordinate = [1, 0];
+        const startCoordinate = [6, 1];
+        const endCoordinate = [4, 6];
         const MCC = new MissionControlCenter();
-        const safestRoute = MCC.calculatesSafestRoute(startCoordinate, endCoordinate);
+        const safestRoute = MCC.calculateSafestRoute(startCoordinate, endCoordinate, "NORTH");
 
-        expect(safestRoute).toBe("FLLFLFFF");
+        expect(safestRoute).toBe("FLFFRFFFF");
     });
 });

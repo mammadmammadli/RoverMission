@@ -1,104 +1,192 @@
 class MissionControlCenter {
-    calculatesSafestRoute(startPoint, endPoint) {
-        let currentX = startPoint[0];
-        let currentY = startPoint[1];
-        let directionsToEnd = this.getTheDirectionsToEnd(startPoint, endPoint);
+    calculateSafestRoute(startPoint, endPoint, dir) {
+        let direction = this.directionMapper(dir, false);
         let isReached = false;
         let steps = "";
-        let direction = directionsToEnd[0];
-        let [nextX, nextY] = this.getNextCoordinates([currentX, currentY], direction);
-        let isNextMoveNotSafe = this.checkIfThereWillBeACollisionInNextMove([nextX, nextY], direction);
-        const [endX, endY] = endPoint;
+        let i = 0;
+        let x = startPoint[0]
+        let y = startPoint[1]
+        const endX = endPoint[0];
+        const endY = endPoint[1];
 
         while (!isReached) {
-            if (currentX === endX && currentY === endY) {
+            let [nextX, nextY] = this.getNextCoordinates([x, y], direction);
+            let directionsToEnd = this.getTheDirectionsToEnd([x, y], [endX, endY], direction);
+            let directionToEnd = directionsToEnd[0];
+
+            i++;
+            if (i === 10) {
                 isReached = true;
-            };
+            }
+
+            let isNextMoveNotSafe = this.checkIfThereWillBeACollisionInNextMove([nextX, nextY]);
+
+            if (x === endX && y === endY) {
+                isReached = true;
+            }
 
             if (isNextMoveNotSafe) {
-                direction = directionsToEnd[1];
-            } else {
-                direction = directionsToEnd[0];
-            }
+                directionToEnd = directionsToEnd[1];
 
-            switch (direction) {
-                case "B":
-                    steps += "B";
-                    currentY++;
-                    nextY++;
-                    break;
-                case "F":
-                    steps += "F";
-                    currentY--;
-                    nextY--;
-                    break;
-                case "R":
-                    steps += "R";
-                    currentX++;
-                    nextX++;
-                    break;
-                case "L":
+                if (directionToEnd === 'L') {
                     steps += "L";
-                    nextX--;
-                    currentX--;
-                    break;
-                default:
+                    direction = 4;
+                } else if (directionToEnd === 'R') {
+                    steps += "R";
+                    direction === 2;
+                }
+            } else {
+                if (directionToEnd === 'F') {
+                    switch (direction) {
+                        case 1:
+                            y++;
+                            break;
+                        case 2:
+                            x++
+                            break;
+                        case 3:
+                            y--
+                            break;
+                        case 4:
+                            x--
+                            break;
+                        default:
+                    }
+                    steps += "F";
+                } else if (directionToEnd === "B") {
+                    switch (direction) {
+                        case 1:
+                            y--;
+                            break;
+                        case 2:
+                            x--;
+                            break;
+                        case 3:
+                            y++;
+                            break;
+                        case 4:
+                            x++;
+                            break;
+                        default:
+                    }
+                    steps += "B";
+                } else if (directionToEnd === "L") {
+                    if (direction === 1) {
+                        direction = 4;
+                    } else {
+                        direction--;
+                    }
+                    steps += "L";
+                } else if (directionToEnd === "R") {
+                    if (direction === 4) {
+                        direction = 1;
+                    } else {
+                        direction++;
+                    }
+                    steps += "R";
+                }
             }
-
-            isNextMoveNotSafe = this.checkIfThereWillBeACollisionInNextMove([nextX, nextY], direction);
-            directionsToEnd = this.getTheDirectionsToEnd([currentX, currentY], [endX, endY]);
         }
 
         return steps;
     }
 
-    getTheDirectionsToEnd(currentPoint, endPoint) {
-        const [curentX, currentY] = currentPoint;
-        const [endX, endY] = endPoint;
+    directionMapper = (direction, byNumber) => {
+        if (byNumber) {
+            if (direction === 1) {
+                return "NORTH";
+            } else if (direction === 2) {
+                return "EAST";
+            } else if (direction === 3) {
+                return "SOUTH";
+            } else {
+                return "WEST";
+            }
+        } else {
+            if (direction === "NORTH") {
+                return 1;
+            } else if (direction === "EAST") {
+                return 2;
+            } else if (direction === "SOUTH") {
+                return 3;
+            } else {
+                return 4;
+            }
+        }
+    }
+
+    getNextCoordinates([x, y], direction) {
+        if (direction === 1) {
+            return [x, y + 1];
+        } else if (direction === 2) {
+            return [x + 1, y];
+        } else if (direction === 3) {
+            return [x, y - 1];
+        } else {
+            return [x - 1, y];
+        }
+    }
+
+    checkIfThereWillBeACollisionInNextMove([nextX, nextY]) {
+        const obstacles = [[6, 3], [4, 1]];
+
+        return obstacles.some(([x, y]) => nextX === x && nextY === y);
+    }
+
+    getTheDirectionsToEnd([currentX, currentY], [endX, endY], direction) {
         const directions = [];
 
-        if (currentY > endY) {
-            directions.push("F")
-        } else if (endY > currentY) {
-            directions.push("B");
-        }
+        if (direction === 1) {
+            if (currentY > endY) {
+                directions.push("B");
+            } else if (endY > currentY) {
+                directions.push("F");
+            }
 
-        if (curentX > endX) {
-            directions.push("L");
-        } else if (endX > curentX) {
-            directions.push("R");
+            if (currentX > endX) {
+                directions.push("L");
+            } else if (endX > currentX) {
+                directions.push("R");
+            }
+        } else if (direction === 2) {
+            if (currentX > endX) {
+                directions.push("B");
+            } else if (currentX < endX) {
+                directions.push("F");
+            }
+
+            if (currentY > endY) {
+                directions.push("R")
+            } else if (endY > currentY) {
+                directions.push("L");
+            }
+        } else if (direction === 3) {
+            if (currentY > endY) {
+                directions.push("F");
+            } else if (endY > currentY) {
+                directions.push("B");
+            }
+
+            if (currentX > endX) {
+                directions.push("R");
+            } else if (endX > currentX) {
+                directions.push("L");
+            }
+        } else if (direction === 4) {
+            if (currentX > endX) {
+                directions.push("F");
+            } else if (currentX < endX) {
+                directions.push("B");
+            }
+
+            if (currentY > endY) {
+                directions.push("L")
+            } else if (endY > currentY) {
+                directions.push("R");
+            }
         }
 
         return directions;
-    }
-
-    checkIfThereWillBeACollisionInNextMove(nextMove, direction) {
-        const obstacles = [[4, 3], [3, 3], [2, 2]];
-        const [nextX, nextY] = nextMove;
-
-        if (direction === "F") {
-            return obstacles.some(([x, y]) => nextX === x && nextY === y);
-        } else if (direction === "B") {
-            return obstacles.some(([x, y]) => nextX === x && nextY === y);
-        } else if (direction === "L") {
-            return obstacles.some(([x, y]) => nextX === x && nextY === y);
-        } else if (direction === "R") {
-            return obstacles.some(([x, y]) => nextX === x && nextY === y);
-        }
-    }
-
-    getNextCoordinates(nextCoordinate, direction) {
-        const [nextX, nextY] = nextCoordinate;
-        switch (direction) {
-            case "B":
-                return [nextX, nextY + 1];
-            case "F":
-                return [nextX, nextY - 1];
-            case "R":
-                return [nextX + 1, nextY];
-            case "L":
-                return [nextX - 1, nextY];
-        }
     }
 }
 

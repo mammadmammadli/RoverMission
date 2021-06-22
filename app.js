@@ -11,10 +11,13 @@ app.get("/health-check", (_, res) => {
 
 app.post("/move", (req, res) => {
     const { command } = req.body;
-    const rover = new Rover();
-    rover.move(command);
-
-    return res.json(rover.getCoordinates());
+    try {
+        const rover = new Rover(4, 2, "EAST");
+        rover.moveByCommand(command);
+        return res.json(rover.getCoordinates());
+    } catch (e) {
+        throw new Error(e.message);
+    }
 });
 
 module.exports = app;
